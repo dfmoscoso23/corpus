@@ -1,0 +1,24 @@
+<html>
+
+<head>
+	<title>Bienvenido al Corpus de las Lenguas Ecuatorianas</title>
+</head>
+<body>
+
+	<form action="/procesando/" method="POST">{% csrf_token %}
+		
+		<p>Título:<input type="text" name="titu"></p>
+
+		<p>Fuente:<input type="text" name="fuen"></p>
+
+		<p>Documento:<textarea name="docu" rows="15" cols="45"></textarea> </p>
+
+		<input type="submit" name="Procesar">
+
+
+	</form>
+
+
+</body>
+
+</html>
