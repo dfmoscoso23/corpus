@@ -26,7 +26,8 @@ def procesando(request):
 		tema = 0
 		docu=documentador(titulo,tipo,fuente, fecha, zona, subzona, tema, documento)
 		docu.guardarlo()
-		return render(request,"corpus_base/procesando.html",{"documento":documento})
+		lista=docu.tokenizador()
+		return render(request,"corpus_base/procesando.html",{"documento":documento,"lista":lista})
 	else:
 		mensaje="No has enviado nada"
 	return HttpResponse(mensaje)

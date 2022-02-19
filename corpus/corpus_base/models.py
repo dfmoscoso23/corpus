@@ -39,6 +39,8 @@ class documentos (models.Model):
 	parrafos = models.IntegerField()
 	extension_tokens = models.IntegerField()
 	documento = models.CharField(max_length=25000)
+	def __str__ (self):
+		return self.titulo 
 
 class lemas (models.Model):
 	id=models.AutoField(primary_key=True)
@@ -47,24 +49,33 @@ class lemas (models.Model):
 class clases_de_palabras (models.Model):
 	id=models.IntegerField()
 	clase  = models.CharField(max_length=30, primary_key=True)
-	determinante_1 = models.CharField(max_length=30)
-	determinante_2 = models.CharField(max_length=30)
-	determinante_3 = models.CharField(max_length=30)
+	determinante_1 = models.CharField(max_length=30,null=True,blank=True)
+	determinante_2 = models.CharField(max_length=30,null=True,blank=True)
+	determinante_3 = models.CharField(max_length=30,null=True,blank=True)
+
+	def __str__ (self):
+		return self.clase +" "+str(self.determinante_1)+" "+str(self.determinante_2)+" "+str(self.determinante_3)
 
 class determinante_1 (models.Model):
 	id = models.AutoField(primary_key=True)
 	determinante = models.CharField(max_length=45)
 	tipo = models.CharField(max_length=30)
+	def __str__ (self):
+		return self.tipo +" "+ self.determinante
 
 class determinante_2 (models.Model):
 	id = models.AutoField(primary_key=True)
 	determinante = models.CharField(max_length=45)
 	tipo = models.CharField(max_length=30)
+	def __str__ (self):
+		return self.tipo +" "+ self.determinante
 
 class determinante_3 (models.Model):
 	id = models.AutoField(primary_key=True)
 	determinante = models.CharField(max_length=45)
 	tipo = models.CharField(max_length=30)
+	def __str__ (self):
+		return self.tipo +" "+ self.determinante
 
 class casos (models.Model):
 	id = models.AutoField(primary_key=True)
