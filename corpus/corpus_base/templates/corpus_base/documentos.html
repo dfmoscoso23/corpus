@@ -1,9 +1,7 @@
-<html>
+{% extends "corpus_base/base.html"%}
+{% load static %}
 
-<head>
-	<title>Bienvenido al Corpus de las Lenguas Ecuatorianas</title>
-</head>
-<body>
+{% block content %}
 
 	<form action="/procesando/" method="POST">{% csrf_token %}
 		
@@ -18,7 +16,4 @@
 
 	</form>
 
-
-</body>
-
-</html>
+{% endblock %}
