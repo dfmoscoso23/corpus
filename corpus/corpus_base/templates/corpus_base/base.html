@@ -34,27 +34,52 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item active px-lg-4">
+          <li class="nav-item {% if request.path == '/' %}active{%endif%} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href={% url 'Inicio' %}>Inicio</a>
           </li>
-          <li class="nav-item px-lg-4">
+          <li class="nav-item {% if request.path == '/' %}active{%endif%} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href={% url 'Inicio' %}>Acerca de</a>
           </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href={% url 'Documentos' %}>Consulta el corpus</a>
+          <li class="nav-item {% if request.path == '/consulta/' %}active{%endif%} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href={% url 'Consulta' %}>Consulta el corpus</a>
           </li>
-          <li class="nav-item px-lg-4">
+          {% if request.user.is_authenticated %}
+          <li class="nav-item {% if request.path == '/documentos/' %}active{%endif%} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href={% url 'Documentos' %}>Ingresa Documentos</a>
+          </li>
+          {% endif %}
+          <li class="nav-item {% if request.path == '/contacto/' %}active{%endif%} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href={% url 'Contacto' %}>Contacto</a>
           </li>
-          <li class="nav-item px-lg-4">
+          <li class="nav-item {% if request.path == '/' %}active{%endif%} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href={% url 'Inicio' %}>Blog</a>
           </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item {% if request.path == '/autenticacion/' %}active{%endif%} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href={% url 'Logout' %}>Salir</a>
+          </li>
+          {% else %}
+          <li class="nav-item {% if request.path == '/autenticacion/' %}active{%endif%} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href={% url 'Register' %}>Registrarse</a>
+          </li>
+          <li class="nav-item {% if request.path == '/autenticacion/' %}active{%endif%} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href={% url 'Login' %}>Ingresar</a>
+          </li>
+          {% endif %}
          
         </ul>
       </div>
     </div>
   </nav>
+{% if messages %}
+  {% for message in messages %}
+    <div class="contenedorformularios text-white" style="text-align: center;" >
+      
+      {{ message }}
 
+    </div>
+  {% endfor %}
+{% endif %}
 {% block content %}
 
 
@@ -76,7 +101,7 @@
 	            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
 	          </span>
 	        </a>
-	        <a href="#" class="link">
+	        <a href="iiio.com" class="link">e
 	          <span class="fa-stack fa-lg">
 	            <i class="fa fa-circle fa-stack-2x"></i>
 	            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>

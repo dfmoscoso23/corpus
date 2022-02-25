@@ -1,6 +1,6 @@
 body {
   font-family: 'Lora';
-  background: linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)), url("../img/bg_main.jpg");
+  background: linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)); /*url("../img/bg_main.jpg")*/;
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
@@ -80,7 +80,7 @@ p {
 }
 
 #mainNav {
-  background-color: rgba(24, 64, 8);
+  background-color: rgba(240, 64, 8);
   font-family: 'Raleway';
 }
 
@@ -276,4 +276,13 @@ ul.errorlist{
   padding-top: .75rem;
   font-style: italic;
   color: red;
+}
+
+.contenedorformularios{
+  background-color: rgba(71, 169, 86, 0.8);
+  width: 50%;
+  margin: 10px auto;
+  border-radius: 5px;
+  padding: 15px 15px;
+
 }

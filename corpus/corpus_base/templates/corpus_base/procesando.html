@@ -1,9 +1,7 @@
-<html>
+{% extends "corpus_base/base.html"%}
+{% load static %}
 
-<head>
-	<title>Bienvenido al Corpus de las Lenguas Ecuatorianas</title>
-</head>
-<body>
+{% block content %}
 
 	<p>
 		Enviaste el documento: <strong>{{documento}}</strong>
@@ -14,6 +12,4 @@
 		{% endfor %}
 	</ul>
 
-</body>
-
-</html>
+{% endblock %}

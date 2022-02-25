@@ -1,19 +1,29 @@
 {% extends "corpus_base/base.html"%}
 {% load static %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
+	<div class="contenedorformularios text-white" style="text-align: center;" >
+      
+      <a class="nav-link text-uppercase text-expanded" href={% url 'Correccion' %}>Corregir Entradas</a>
 
+    </div>
 	<form action="/procesando/" method="POST">{% csrf_token %}
-		
-		<p>Título:<input type="text" name="titu"></p>
+		<div class="contenedorformularios text-white">
+      		<div class="intro">
 
-		<p>Fuente:<input type="text" name="fuen"></p>
+      			{{form|crispy}}
+<!-- 				<p><span class="section-heading-upper text-white">Título:</span><input type="text" name="titu"></p>
 
-		<p>Documento:<textarea name="docu" rows="15" cols="45"></textarea> </p>
+				<p><span class="section-heading-upper text-white">Fuente:</span><input type="text" name="fuen"></p>
 
-		<input type="submit" name="Procesar">
+				<p><span class="section-heading-upper text-white">Documento:</span><textarea name="docu" rows="15" cols="45"></textarea> </p> -->
+				<br>
+				<input type="submit" name="Procesar">
 
-
+			</div>
+		</div>
 	</form>
 
 {% endblock %}

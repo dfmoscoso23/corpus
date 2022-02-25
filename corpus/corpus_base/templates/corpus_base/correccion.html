@@ -1,0 +1,40 @@
+{% extends "corpus_base/base.html"%}
+{% load static %}
+
+{% block content %}
+
+	<div class="contenedorformularios text-white" style="text-align: center;" >
+      
+      <a class="nav-link text-uppercase text-expanded" href={% url 'Documentos' %}>Ingresar el documento</a>
+
+    </div>
+    <table class="table table-borderless text-white">
+		<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">documento</th>
+			<th scope="col">caso</th>
+			<th scope="col">lema</th>
+			<th scope="col">mayuscula</th>
+			<th scope="col">posicion</th>
+			<th scope="col">lema_anterior</th>
+			<th scope="col">lema_posterior</th>
+			<th scope="col">desinencia</th>
+			<th scope="col">prefijos</th>
+			<th scope="col">clase_de_palabra</th>
+			<th scope="col">determinante_1</th>
+			<th scope="col">determinante_2</th>
+			<th scope="col">determinante_3</th>
+		</tr>
+		<tbody>
+			<tr>
+				<th scope="row">1</th>
+				<td>Mark</td>
+				<td>Otto</td>
+				<td>@mdo</td>		
+			</tr>
+	  </thead>
+	</table>
+	
+
+{% endblock %}

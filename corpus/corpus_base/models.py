@@ -89,7 +89,7 @@ class casos (models.Model):
 	desinencia = models.CharField(max_length=5)
 	prefijos = models.CharField(max_length=5)
 	clase_de_palabra = models.ForeignKey(clases_de_palabras, on_delete=models.CASCADE)
-	determinante_1 = models.ForeignKey(determinante_1, on_delete=models.CASCADE)
-	determinante_2 = models.ForeignKey(determinante_2, on_delete=models.CASCADE)
-	determinante_3 = models.ForeignKey(determinante_3, on_delete=models.CASCADE)
+	determinante_1 = models.ForeignKey(determinante_1, on_delete=models.CASCADE,null=True,blank=True)
+	determinante_2 = models.ForeignKey(determinante_2, on_delete=models.CASCADE,null=True,blank=True)
+	determinante_3 = models.ForeignKey(determinante_3, on_delete=models.CASCADE,null=True,blank=True)
 

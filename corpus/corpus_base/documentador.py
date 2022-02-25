@@ -2,7 +2,7 @@ import nltk
 from nltk.tokenize import word_tokenize, wordpunct_tokenize
 from datetime import date, datetime
 import re
-from corpus_base.models import documentos, tipo_documento,fuente, zonas, subzonas,temas
+from corpus_base.models import documentos, tipo_documento,fuente, zonas, subzonas,temas, clases_de_palabras, determinante_1,determinante_2,determinante_3, casos, lemas
 import pickle
 import pandas as pd
 
@@ -24,7 +24,7 @@ class documentador():
 
 	def guardarlo(self):
 		docu=documentos(
-			titulo=self.titulo[:35],
+			titulo=self.titulo[:120],
 			tipo_documento = tipo_documento.objects.get(id = self.tipo_documento),
 			fuente = fuente.objects.get(id = int(self.fuente)),
 			fecha_incorporacion = self.fecha_incorporacion,
@@ -90,6 +90,7 @@ class documentador():
 		for i,token in enumerate(tokens):
 			token
 			lema= self.lematizador(token.lower())
+			self.guardarlema(lema)
 			mayuscula=bool(re.search(r'\A[A-Z]',token ))
 			posicion=i
 			if i == 0:
@@ -103,11 +104,13 @@ class documentador():
 				lema_posterior = self.lematizador(tokens[i+1])
 			desinencia= self.desinenciador(token.lower())
 			prefijo = self.prefijador(token.lower())
-			clase_de_palabra=""
+			clase_de_palabra= "desconocido"
 			determinante_1 = ""
 			determinante_2 = ""
 			determinante_3 = ""
-			lista.append((token,mayuscula,posicion,desinencia,prefijo,lema,lema_posterior,lema_anterior))
+			caso=(token,lema,mayuscula,posicion,lema_anterior,lema_posterior,desinencia,prefijo,clase_de_palabra,determinante_1,determinante_2,determinante_3)
+			lista.append(caso)
+			self.guardarcasos(caso)
 			print(token,mayuscula,posicion,desinencia,prefijo,lema)
 		return lista
 	def lemmascrapper(token):
@@ -157,3 +160,27 @@ class documentador():
 					except UnicodeEncodeError:
 						pass
 		return lemma
+	def guardarlema(self, lema_entry):
+		lem=lemas.objects.filter(lema=lema_entry)
+		if len(lem)==0:
+			glem=lemas(lema=lema_entry)
+			glem.save()
+			
+	def guardarcasos(self, caso):
+		cas=casos(
+			documento=documentos.objects.get(titulo=self.titulo),
+			caso=caso[0],
+			lema=lemas.objects.get(lema=caso[1]),
+			mayuscula=caso[2],
+			posicion=caso[3],
+			lema_anterior=caso[4],
+			lema_posterior=caso[5],
+			desinencia=caso[6],
+			prefijos=caso[7],
+			clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+			# determinante_1=determinante_1.objects.get(caso[9]),
+			# determinante_2=determinante_1.objects.get(caso[10]),
+			# determinante_3=determinante_1.objects.get(caso[11])
+			)
+		cas.save()
+
