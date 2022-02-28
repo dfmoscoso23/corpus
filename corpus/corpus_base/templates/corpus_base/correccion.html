@@ -8,33 +8,64 @@
       <a class="nav-link text-uppercase text-expanded" href={% url 'Documentos' %}>Ingresar el documento</a>
 
     </div>
-    <table class="table table-borderless text-white">
-		<thead>
-		<tr>
-			<th scope="col">#</th>
-			<th scope="col">documento</th>
-			<th scope="col">caso</th>
-			<th scope="col">lema</th>
-			<th scope="col">mayuscula</th>
-			<th scope="col">posicion</th>
-			<th scope="col">lema_anterior</th>
-			<th scope="col">lema_posterior</th>
-			<th scope="col">desinencia</th>
-			<th scope="col">prefijos</th>
-			<th scope="col">clase_de_palabra</th>
-			<th scope="col">determinante_1</th>
-			<th scope="col">determinante_2</th>
-			<th scope="col">determinante_3</th>
-		</tr>
-		<tbody>
+    <div class="contenedorformularios text-white" style="text-align: center;" >
+      
+      <h3 class="text-white">Elige un documento: </h3>
+      <form method="GET" action="">
+
+      	{{formulario}}
+
+      <button type="submit" class="btn-xl">buscar</button>
+      </form>
+    </div>
+    <div class="contenedorformularios text-white" style="text-align: center;" >
+      <p>{{documento}}</p>
+
+    </div>
+    <div class="contenedorcorrecion">
+	    <table class="table table-borderless">
+			<thead>
 			<tr>
-				<th scope="row">1</th>
-				<td>Mark</td>
-				<td>Otto</td>
-				<td>@mdo</td>		
+				<th scope="col">#</th>
+				<!-- <th scope="col">documento</th> -->
+				<th scope="col">caso</th>
+				<th scope="col">lema</th>
+	<!-- 			<th scope="col">mayuscula</th>
+				<th scope="col">posicion</th>
+				<th scope="col">lema_anterior</th>
+				<th scope="col">lema_posterior</th> -->
+				<th scope="col">desinencia</th>
+				<th scope="col">prefijos</th>
+				<th scope="col">clase_de_palabra</th>
+				<th scope="col">determinante_1</th>
+				<th scope="col">determinante_2</th>
+				<th scope="col">determinante_3</th>
 			</tr>
-	  </thead>
-	</table>
+			</thead>
+			<form method="POST" action="">
+				{% csrf_token %}
+			{% for id,cas in casos %}
+			<tbody>
+				<tr>
+					
+					<th><input name="id" value="{{id}}"></th>
+					<td>{{cas.caso}}</td>
+					<td>{{cas.lema}}</td>
+					<td>{{cas.desinencia}}</td>
+					<th>{{cas.prefijos}}</th>
+					<td>{{cas.clase_de_palabra}}</td>
+					<td>{{cas.determinante_1}}</td>
+					<td>{{cas.determinante_2}}</td>
+					<td>{{cas.determinante_3}}</td>
+	<!-- 				<td><button type="submit" class="btn btn-success">Corregir</button></td> -->
+					
+				</tr>
+			{% endfor %}
+			<button type="submit" class="btn btn-success">Corregir todos</button></td>
+			</form>
+			</tbody>
+		</table>
+	</div>
 	
 
 {% endblock %}

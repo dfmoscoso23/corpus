@@ -1,0 +1,14 @@
+{% extends "corpus_base/base.html"%}
+{% load static %}
+
+{% block content %}
+
+<form method="POST" action="">
+		{% csrf_token %}
+		{{cas}}
+
+	<button type="submit" class="btn btn-success">Ingresa</button> 
+</form>
+
+
+{% endblock %}
