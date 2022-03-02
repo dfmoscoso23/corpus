@@ -5,6 +5,7 @@ from django.contrib import messages
 from corpus_base.forms import documentosForm, casosForm, documentosfilterForm, casosconsultaForm
 from corpus_base.models import casos
 from corpus_base.models import documentos as modeldocumentos
+from django.contrib.auth.models import User
 # Create your views here.
 
 def home(request):
@@ -101,10 +102,11 @@ def consulta(request):
 		return render(request, "corpus_base/consulta.html",{"form":form,"resultado":resultado_combo})
 def documentos(request):
 	form = documentosForm(request.POST)
-
+	print(request.user)
 	return render(request, "corpus_base/documentos.html", {'form':form})
 
 def procesando(request):
+
 	if request.method == 'POST':
 		#mensaje="Procesando %r" %request.GET["docu"]
 		form = documentosForm(request.POST)
@@ -120,6 +122,8 @@ def procesando(request):
 		documento = request.POST['documento']
 		docu=documentador(titulo,tipo,fuente, zona, subzona, tema, documento)
 		if form.is_valid():
+			form.save(commit=False)
+			form.instance.usuario=request.user
 			form.save()
 			lista = docu.tokenizador()
 			return render(request,"corpus_base/procesando.html",{"documento":documento,"lista":lista})
@@ -167,6 +171,10 @@ def correccion(request):
 				}
 				cambio=casosForm(data, instance=casos.objects.get(id=request.POST.getlist('id')[item]))
 				cambio.save()
+			documento_filtrado=request.GET.get('documento', 33)
+			doc_modificado=modeldocumentos.objects.get(id=documento_filtrado)
+			doc_modificado.revisado=True
+			doc_modificado.save()
 		else:
 			print(request.POST['caso'])
 			# cambio=casosForm(request.POST, instance=casos.objects.get(id=request.POST['id']))

@@ -183,7 +183,8 @@ class documentador():
 				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8])
 				#determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				# determinante_2=determinante_2.objects.get(determinante=caso[10]),
-				# determinante_3=determinante_3.objects.get(determinante=caso[11])
+				# determinante_3=determinante_3.objects.get(determinante=caso[11]),
+				# determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)
 		elif (caso[10] =="") & (caso[11] =="") & (caso[12] ==""):
 			cas=casos(
@@ -199,7 +200,8 @@ class documentador():
 				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
 				determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				#determinante_2=determinante_2.objects.get(determinante=caso[10]),
-				# determinante_3=determinante_3.objects.get(determinante=caso[11])
+				# determinante_3=determinante_3.objects.get(determinante=caso[11]),
+				#determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)
 		elif (caso[9] !="") & (caso[10] !="") &  (caso[11] =="") & (caso[12] ==""):
 			print(caso[9])
@@ -216,9 +218,10 @@ class documentador():
 				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
 				determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				determinante_2=determinante_2.objects.get(determinante=caso[10]),
-				#determinante_3=determinante_3.objects.get(determinante=caso[11])
+				#determinante_3=determinante_3.objects.get(determinante=caso[11]),
+				#determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)
-		elif (caso[9] !="") & (caso[10] !="") & (caso[12] ==""):
+		elif (caso[9] !="") & (caso[10] !="") & (caso[12] =="")& (caso[11] !=""):
 			cas=casos(
 				documento=documentos.objects.get(titulo=self.titulo),
 				caso=caso[0],
@@ -232,7 +235,8 @@ class documentador():
 				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
 				determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				determinante_2=determinante_2.objects.get(determinante=caso[10]),
-				#determinante_3=determinante_3.objects.get(determinante=caso[11])
+				determinante_3=determinante_3.objects.get(determinante=caso[11]),
+				#determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)
 		elif (caso[10] !="") & (caso[9] =="") & (caso[11] ==""):
 			cas=casos(
@@ -332,7 +336,7 @@ class documentador():
 					det3=""
 					det4=""
 				elif dic['VerbForm']=="Part":
-					det2="participio pasado"
+					det2="participio de pasado"
 					det1=""
 					det3=""
 					det4=""
@@ -564,7 +568,7 @@ class documentador():
 					det3=""
 					det4=""
 				elif dic['VerbForm']=="Part":
-					det2="participio pasado"
+					det2="participio de pasado"
 					det1=""
 					det3=""
 					det4=""

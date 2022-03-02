@@ -1,5 +1,6 @@
 from django.db import models
 from corpus_base.procesos.operaciones import operaciones
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -50,6 +51,12 @@ class documentos (models.Model):
 	parrafos = models.IntegerField()
 	extension_tokens = models.IntegerField()
 	documento = models.CharField(max_length=25000)
+	autor = models.CharField(max_length=60,blank=True,null=True)
+	referencia_específica = models.CharField(max_length=200)
+	usuario= models.ForeignKey(User, on_delete=models.CASCADE)
+	ultima_modificacion=models.DateField(auto_now=True,null=True)
+	revisado=models.BooleanField(default=False,blank=True)
+
 	def save(self, *args, **kwargs):
 		self.parrafos = self.documento.count("\n")
 		self.extension_tokens= operaciones.conteo_tokens(self.documento)
@@ -69,6 +76,7 @@ class clases_de_palabras (models.Model):
 	determinante_1 = models.CharField(max_length=30,null=True,blank=True)
 	determinante_2 = models.CharField(max_length=30,null=True,blank=True)
 	determinante_3 = models.CharField(max_length=30,null=True,blank=True)
+	determinante_4 = models.CharField(max_length=30,null=True,blank=True)
 
 	def __str__ (self):
 		return self.clase# +" "+str(self.determinante_1)+" "+str(self.determinante_2)+" "+str(self.determinante_3)
@@ -93,6 +101,13 @@ class determinante_3 (models.Model):
 	tipo = models.CharField(max_length=30)
 	def __str__ (self):
 		return self.tipo +" "+ self.determinante
+		
+class determinante_4 (models.Model):
+	id = models.AutoField(primary_key=True)
+	determinante = models.CharField(max_length=45)
+	tipo = models.CharField(max_length=30)
+	def __str__ (self):
+		return self.tipo +" "+ self.determinante
 
 class casos (models.Model):
 	id = models.AutoField(primary_key=True)
@@ -109,6 +124,7 @@ class casos (models.Model):
 	determinante_1 = models.ForeignKey(determinante_1, on_delete=models.CASCADE,null=True,blank=True)
 	determinante_2 = models.ForeignKey(determinante_2, on_delete=models.CASCADE,null=True,blank=True)
 	determinante_3 = models.ForeignKey(determinante_3, on_delete=models.CASCADE,null=True,blank=True)
+	determinante_4 = models.ForeignKey(determinante_4, on_delete=models.CASCADE,null=True,blank=True)
 	def __str__ (self):
 		return str(self.id) + " "+ self.caso
 
