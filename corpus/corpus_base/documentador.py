@@ -5,7 +5,9 @@ import re
 from corpus_base.models import documentos, tipo_documento,fuente, zonas, subzonas,temas, clases_de_palabras, determinante_1,determinante_2,determinante_3, casos, lemas
 import pickle
 import pandas as pd
-
+import spacy
+from spacy import displacy
+nlp = spacy.load('es_core_news_md')
 
 class documentador():
 
@@ -84,30 +86,31 @@ class documentador():
 		return prefijo
 
 	def tokenizador(self):
-		tokens=wordpunct_tokenize(self.documento)
+		tokens=nlp(self.documento)
 		lista=[]
 		for i,token in enumerate(tokens):
-			token
-			lema= self.lematizador(token.lower())
+			lema= token.lemma_ #self.lematizador(token.lower())
 			self.guardarlema(lema)
-			mayuscula=bool(re.search(r'\A[A-Z]',token ))
+			mayuscula=bool(re.search(r'\A[A-Z]',token.text ))
 			posicion=i
 			if i == 0:
 				lema_anterior=""
-				lema_posterior = self.lematizador(tokens[i+1].lower())
+				lema_posterior = tokens[i+1].lemma_#self.lematizador(tokens[i+1].lower())
 			elif i == len(tokens)-1:
 				lema_posterior=""
-				lema_anterior = self.lematizador(tokens[i-1].lower())
+				lema_anterior = tokens[i-1].lemma_#self.lematizador(tokens[i-1].lower())
 			else:
-				lema_anterior = self.lematizador(tokens[i-1])
-				lema_posterior = self.lematizador(tokens[i+1])
-			desinencia= self.desinenciador(token.lower())
-			prefijo = self.prefijador(token.lower())
-			clase_de_palabra= "desconocido"
-			determinante_1 = ""
-			determinante_2 = ""
-			determinante_3 = ""
-			caso=(token,lema,mayuscula,posicion,lema_anterior,lema_posterior,desinencia,prefijo,clase_de_palabra,determinante_1,determinante_2,determinante_3)
+				lema_anterior = tokens[i-1].lemma_#self.lematizador(tokens[i-1])
+				lema_posterior = tokens[i+1].lemma_#self.lematizador(tokens[i+1])
+			desinencia= self.desinenciador(token.text.lower())
+			prefijo = self.prefijador(token.text.lower())
+			clase, det1, det2, det3, det4 = self.tagger(token)
+			clase_de_palabra= clase
+			determinante_1 = det1
+			determinante_2 = det2
+			determinante_3 = det3
+			determinante_4 = det4
+			caso=(token,lema,mayuscula,posicion,lema_anterior,lema_posterior,desinencia,prefijo,clase_de_palabra,determinante_1,determinante_2,determinante_3,determinante_4)
 			lista.append(caso)
 			self.guardarcasos(caso)
 			print(token,mayuscula,posicion,desinencia,prefijo,lema)
@@ -166,20 +169,446 @@ class documentador():
 			glem.save()
 			
 	def guardarcasos(self, caso):
-		cas=casos(
-			documento=documentos.objects.get(titulo=self.titulo),
-			caso=caso[0],
-			lema=lemas.objects.get(lema=caso[1]),
-			mayuscula=caso[2],
-			posicion=caso[3],
-			lema_anterior=caso[4],
-			lema_posterior=caso[5],
-			desinencia=caso[6],
-			prefijos=caso[7],
-			clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
-			# determinante_1=determinante_1.objects.get(caso[9]),
-			# determinante_2=determinante_1.objects.get(caso[10]),
-			# determinante_3=determinante_1.objects.get(caso[11])
-			)
+		if (caso[9] =="") & (caso[10] =="") & (caso[11] =="") & (caso[12] ==""):
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8])
+				#determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				# determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				# determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)
+		elif (caso[10] =="") & (caso[11] =="") & (caso[12] ==""):
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+				determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				#determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				# determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)
+		elif (caso[9] !="") & (caso[10] !="") &  (caso[11] =="") & (caso[12] ==""):
+			print(caso[9])
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+				determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				#determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)
+		elif (caso[9] !="") & (caso[10] !="") & (caso[12] ==""):
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+				determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				#determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)
+		elif (caso[10] !="") & (caso[9] =="") & (caso[11] ==""):
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+				#determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				#determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)
+		elif (caso[10] =="") & (caso[9] =="") & (caso[11] !=""):
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+				#determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				#determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)
+		else:
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+				determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)			
 		cas.save()
-
+	def tagger(self, token):
+		dic_numero={"Sing":"Singular","Plur":"Plural"}
+		dic_modo={"Imp":"imperativo","Ind":"indicativo","Sub":"subjuntivo"}
+		dic_persona={"1":'primera',"2":"segunda","3":"tercera"}
+		dic_tiempo={
+			"Pres":"presente",
+			"Past":"pretérito perfecto simple",
+			"Imp":"pretérito imperfecto",
+			"Fut":"futuro simple"                    
+		}
+		dic_genero={"Masc":"Masculino","Fem":"Femenino","Neut":"Neutro"}
+		dic_numeral={"Card":"cardinal","Ord":"ordinal","Part":"partitivo"}
+		if token.pos_ == "ADJ":
+			clase="adjetivo"
+			dic=token.morph.to_dict()
+			try:
+				numero=dic['Number']
+				det1=dic_numero[numero]
+			except:
+				det1=""
+			try:
+				genero=dic['Gender']
+				det2=dic_genero[genero]
+			except:
+				det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "ADP":
+			clase="preposición"
+			det1=""
+			det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "ADV":
+			clase="adverbio"
+			det1=""
+			det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "AUX":
+			clase="verbo"
+			dic=token.morph.to_dict()
+			try:
+				if dic['VerbForm']=="Inf":
+					det2="infinitivo simple"
+					det1=""
+					det3=""
+					det4=""
+				elif dic['VerbForm']=="Part":
+					det2="participio pasado"
+					det1=""
+					det3=""
+					det4=""
+				elif dic['VerbForm']=="Ger":
+					det2="gerundio simple"
+					det1=""
+					det3=""
+					det4=""
+				else:
+					try:
+						modo=dic['Mood']
+						det1=dic_modo[modo]
+					except:
+						det1=""
+					try:
+						tiempo=dic['Tense']
+						det2=dic_tiempo[tiempo]
+					except:
+						det2=""
+					try:
+						persona=dic['Person']
+						det3=dic_persona[persona]
+					except:
+						det3=""
+					try:
+						numero=dic['Number']
+						det4=dic_numero[numero]
+					except:
+						det4=""
+			except:
+				det1=""
+				det2=""
+				det3=""
+				det4=""
+		elif token.pos_ == "CCONJ":
+			clase="conjunción"
+			try:
+				det1="coordinante"
+			except:
+				det1="" 
+			det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "DET":
+			dic=token.morph.to_dict()
+			try:
+				preclase=dic['PronType']
+				if preclase=="Art":
+					clase="artículo"
+					try:
+						numero=dic['Number']
+						det1=dic_numero[numero]
+					except:
+						det1=""
+					try:
+						genero=dic['Gender']
+						det2=dic_genero[genero]
+					except:
+						det2=""
+				else:
+					clase="demostrativo"
+					try:
+						numero=dic['Number']
+						det1=dic_numero[numero]
+					except:
+						det1=""
+					try:
+						genero=dic['Gender']
+						det2=dic_genero[genero]
+					except:
+						det2="" 
+				det3=""
+				det4=""
+			except:
+				clase="artículo"
+				det1=""
+				det2=""
+				det3=""
+				det4=""
+		elif token.pos_ == "INTJ":
+			clase="interjección"
+			det1=""
+			det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "NOUN":
+			clase="sustantivo"
+			dic=token.morph.to_dict()
+			try:
+				numero=dic['Number']
+				det1=dic_numero[numero]
+			except:
+				det1=""
+			try:
+				genero=dic['Gender']
+				det2=dic_genero[genero]
+			except:
+				det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "NUM":
+			clase="numeral"
+			dic=token.morph.to_dict()
+			try:
+				numero=dic['Number']
+				det1=dic_numero[numero]
+			except:
+				det1=""
+			try:
+				genero=dic['Gender']
+				det2=dic_genero[genero]
+			except:
+				det2=""
+			try:
+				numeral=dic['NumType']
+				det3=dic_numeral[numeral]
+			except:
+				det3=""
+			det4=""
+		elif token.pos_ == "PART":
+			clase="afijo"
+			det1=""
+			det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "PRON":
+			dic=token.morph.to_dict()
+			if dic['PronType']=="Prs":
+				clase="pronombre"
+				try:
+					numero=dic['Number']
+					det1=dic_numero[numero]
+				except:
+					det1=""
+				try:
+					genero=dic['Gender']
+					det2=dic_genero[genero]
+				except:
+					det2=""
+				try:
+					persona=dic['Person']
+					det3=dic_persona[persona]
+				except:
+					det3=""
+				try:
+					dic_casos={"Acc":"acusativo","Dat":"dativo"}
+					caso=dic['Case']
+					det4=dic_casos[caso]
+				except:
+					det4=""
+			elif dic['PronType']=="Int,Rel":
+				clase="relativo"
+				try:
+					det1=dic['Number']
+				except:
+					det1=""
+				try:
+					det2=dic['Gender']
+				except:
+					det2=""
+				det3=""
+				det4=""
+			elif dic['PronType']=="Rel":
+				clase="relativo"
+				try:
+					numero=dic['Number']
+					det1=dic_numero[numero]
+				except:
+					det1=""
+				try:
+					genero=dic['Gender']
+					det2=dic_genero[genero]
+				except:
+					det2=""
+				det3=""
+				det4=""
+			elif dic['PronType']=="Int":
+				clase="interrogativo"
+				try:
+					numero=dic['Number']
+					det1=dic_numero[numero]
+				except:
+					det1=""
+				try:
+					genero=dic['Gender']
+					det2=dic_genero[genero]
+				except:
+					det2=""
+			else:
+				clase="desconocido"
+				det1=""
+				det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "PROPN":
+			clase="sustantivo"
+			det1=""
+			det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "PUNCT":
+			clase="puntuación"
+			det1=""
+			det2=""
+			det3=""
+			det4=""        
+		elif token.pos_ == "SCONJ":
+			clase="conjunción"
+			try:
+				det1="subordinante"
+			except:
+				det1="" 
+			det2=""
+			det3=""
+			det4=""      
+		elif token.pos_ == "SYM":
+			clase="desconcido"
+			det1=""
+			det2=""
+			det3=""
+			det4=""  
+		elif token.pos_ == "VERB":
+			clase="verbo"
+			dic=token.morph.to_dict()
+			try:
+				if dic['VerbForm']=="Inf":
+					det2="infinitivo simple"
+					det1=""
+					det3=""
+					det4=""
+				elif dic['VerbForm']=="Part":
+					det2="participio pasado"
+					det1=""
+					det3=""
+					det4=""
+				elif dic['VerbForm']=="Ger":
+					det2="gerundio simple"
+					det1=""
+					det3=""
+					det4=""
+				else:
+					try:
+						modo=dic['Mood']
+						det1=dic_modo[modo]
+					except:
+						det1=""
+					try:
+						tiempo=dic['Tense']
+						det2=dic_tiempo[tiempo]
+					except:
+						det2=""
+					try:
+						persona=dic['Person']
+						det3=dic_persona[persona]
+					except:
+						det3=""
+					try:
+						numero=dic['Number']
+						det4=dic_numero[numero]
+					except:
+						det4=""
+			except:
+				det1=""
+				det2=""
+				det3=""
+				det4=""
+		elif token.pos_ == "X":
+			clase="desconocido"
+			det1=""
+			det2=""
+			det3=""
+			det4=""
+		elif token.pos_ == "SPACE":
+			clase="desconocido"
+			det1=""
+			det2=""
+			det3=""
+			det4=""
+		return(clase,det1,det2,det3,det4)

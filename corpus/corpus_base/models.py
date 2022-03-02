@@ -71,7 +71,7 @@ class clases_de_palabras (models.Model):
 	determinante_3 = models.CharField(max_length=30,null=True,blank=True)
 
 	def __str__ (self):
-		return self.clase +" "+str(self.determinante_1)+" "+str(self.determinante_2)+" "+str(self.determinante_3)
+		return self.clase# +" "+str(self.determinante_1)+" "+str(self.determinante_2)+" "+str(self.determinante_3)
 
 class determinante_1 (models.Model):
 	id = models.AutoField(primary_key=True)

@@ -65,7 +65,10 @@ def consulta(request):
 			elif resul.posicion != 0:
 				pre_contexto = str()
 				for i in range(0,resul.posicion):
-					pre_contexto+=" "+tokens[i]
+					if tokens[i] in [".",",","!","?","¡","¿","'",":",";"]:
+						pre_contexto+=tokens[i]
+					else:
+						pre_contexto+=" "+tokens[i]
 				pre.append(pre_contexto)	
 			else:
 				pre_contexto = ""
@@ -81,8 +84,12 @@ def consulta(request):
 				pos.append(pos_contexto)
 			elif len(tokens) != resul.posicion:
 				pos_contexto = str()
-				for i in range((resul.posicion+1),(len(tokens)+1)):
-					pos_contexto+=" "+tokens[i]
+				for i in range((resul.posicion+1),(len(tokens))):
+					if tokens[i] in [".",",","!","?","¡","¿","'",":",";"]:
+						pos_contexto+=tokens[i]
+					else:
+						pos_contexto+=" "+tokens[i]
+				#pos_contexto+="..."
 				pos.append(pos_contexto)
 			else:
 				pos_contexto = str()
