@@ -2,10 +2,12 @@ from django.shortcuts import render, HttpResponse, redirect
 from corpus_base.documentador import documentador
 from corpus_base.procesos.operaciones import operaciones
 from django.contrib import messages
-from corpus_base.forms import documentosForm, casosForm, documentosfilterForm, casosconsultaForm
-from corpus_base.models import casos
+from corpus_base.forms import documentosForm, casosForm, documentosfilterForm, casosconsultaForm, FormularioZonas
+from corpus_base.models import casos, temas, zonas, subzonas
 from corpus_base.models import documentos as modeldocumentos
 from django.contrib.auth.models import User
+from corpus_base.procesos import filtros
+from corpus_base.procesos.estadisticas import estadisticador
 # Create your views here.
 
 def home(request):
@@ -14,95 +16,84 @@ def home(request):
 
 def consulta(request):
 	form=casosconsultaForm(request.GET)
+	opciones_temas= temas.objects.all()
+	formulario_zonas=FormularioZonas(request.GET)
+	return render(request, "corpus_base/consulta.html",{
+		"form":form,
+		"opciones_temas":opciones_temas,
+		"formulario_zonas":formulario_zonas
+		})
+def resultado(request):
+	form=casosconsultaForm(request.GET)
+	opciones_temas= temas.objects.all()
+	formulario_zonas=FormularioZonas(request.GET)
 	if request.method == 'GET':
-		caso_filtrado=request.GET.get('caso')
-		lema_filtrado=request.GET.get('lema')
-		clase_filtrado=request.GET.get('clase_de_palabra')
-		det1_filtrado=request.GET.get('determinante_1')
-		det2_filtrado=request.GET.get('determinante_2')
-		det3_filtrado=request.GET.get('determinante_3')
-		if caso_filtrado!='' and caso_filtrado is not None:
-			resultado=casos.objects.filter(
-				caso=caso_filtrado
-				)
-		elif lema_filtrado!='' and lema_filtrado is not None:
-			resultado=casos.objects.filter(
-				lema=lema_filtrado
-				)
-		elif clase_filtrado!='' and clase_filtrado is not None:
-			resultado=casos.objects.filter(
-				clase_de_palabra=clase_filtrado
-				)
-		elif det1_filtrado!='' and det1_filtrado is not None:
-			resultado=casos.objects.filter(
-				determinante_1=det1_filtrado
-				)
-		elif det2_filtrado!='' and det2_filtrado is not None:
-			resultado=casos.objects.filter(
-				determinante_2=det2_filtrado
-				)
-		elif det3_filtrado!='' and det3_filtrado is not None:
-			resultado=casos.objects.filter(
-				determinante_3=det3_filtrado
-				)
-		else:
-			messages.success(request, f'No se encontró una búsqueda')
-			resultado=""
-		documentos=list()
-		pre=list()
-		pos=list()
-		doc=list()
-		for resul in resultado:
-			print(resul.posicion)
-			tokens=operaciones.tokenizador(resul.documento.documento)
-			if resul.posicion > 12:
-				pre_contexto = "..."
-				for i in range((resul.posicion-12),resul.posicion):
-					if tokens[i] in [".",",","!","?","¡","¿","'",":",";"]:
-						pre_contexto+=tokens[i]
-					else:
-						pre_contexto+=" "+tokens[i]
-				pre.append(pre_contexto)
-			elif resul.posicion != 0:
-				pre_contexto = str()
-				for i in range(0,resul.posicion):
-					if tokens[i] in [".",",","!","?","¡","¿","'",":",";"]:
-						pre_contexto+=tokens[i]
-					else:
-						pre_contexto+=" "+tokens[i]
-				pre.append(pre_contexto)	
-			else:
-				pre_contexto = ""
-				pre.append(pre_contexto)
-			if len(tokens) > (resul.posicion+12):
-				pos_contexto = str()
-				for i in range((resul.posicion+1),(resul.posicion+12)):
-					if tokens[i] in [".",",","!","?","¡","¿","'",":",";"]:
-						pos_contexto+=tokens[i]
-					else:
-						pos_contexto+=" "+tokens[i]
-				pos_contexto+="..."
-				pos.append(pos_contexto)
-			elif len(tokens) != resul.posicion:
-				pos_contexto = str()
-				for i in range((resul.posicion+1),(len(tokens))):
-					if tokens[i] in [".",",","!","?","¡","¿","'",":",";"]:
-						pos_contexto+=tokens[i]
-					else:
-						pos_contexto+=" "+tokens[i]
-				#pos_contexto+="..."
-				pos.append(pos_contexto)
-			else:
-				pos_contexto = str()
-				pos.append(pos_contexto)
-			doc.append(resul.documento.id)
+		resultado,pre,pos,doc=filtros.filtro_consulta(request)
 		resultado_combo=zip(resultado,pre,pos,doc)
+		cantidad=estadisticador.conteo_resultados(resultado)
+		try:
+			est_result=estadisticador(resultado,pre,pos,doc)
+			zona_mas, b64, temas_imag=est_result.zoonificacion()
+			la_v,la_i,lp_v,lp_i,t_v,t_i,c_v,c_i,lema=est_result.casificador()
+			lemas_anteriores=zip(la_v,la_i)
+			lemas_posteriores=zip(lp_v,lp_i)
+			terminaciones=zip(t_v,t_i)
+			clases=zip(c_v,c_i)
+			lema =lema
+		except:
+			return render(request, "corpus_base/consulta.html",{
+				"form":form,
+				"opciones_temas":opciones_temas,
+				"formulario_zonas":formulario_zonas
+				})
+		return render(request, "corpus_base/resultado.html",{
+			"form":form,
+			"resultado":resultado_combo,
+			"opciones_temas":opciones_temas,
+			"formulario_zonas":formulario_zonas,
+			"cantidad":cantidad,
+			"zona_mas":zona_mas,
+			"imag":b64,
+			"imag_temas":temas_imag,
+			"lemas_anteriores":lemas_anteriores,
+			"lemas_posteriores":lemas_posteriores,
+			"terminaciones":terminaciones,
+			"clases":clases,
+			"lema":lema
+			})
+def estadisticas(request):
+	form=casosconsultaForm(request.GET)
+	opciones_temas= temas.objects.all()
+	formulario_zonas=FormularioZonas(request.GET)
+	if request.method == 'GET':
+		print(request.GET)
+		resultado,pre,pos,doc=filtros.filtro_consulta(request)
+		cantidad=estadisticador.conteo_resultados(resultado)
+		return render(request, "corpus_base/estadisticas.html",{
+			"form":form,
+			"opciones_temas":opciones_temas,
+			"formulario_zonas":formulario_zonas,
+			"cantidad":cantidad
+			})
+def load_estadistica(request):
+	print("HOLA SOY AJAX")
+	foo = request.GET.get('resultado')
+	bar = request.GET.get('documento')
+	print(foo)
+	cantidad=estadisticador.conteo_resultados(foo)
+	return render(request, 'corpus_base/estadisticas.html', {'cantidad': cantidad})
 
-		#documentos.append()
-		return render(request, "corpus_base/consulta.html",{"form":form,"resultado":resultado_combo})
+
+def load_subzonas(request):
+	zona_id = request.GET.get('zona_id')
+	zona = zonas.objects.get(id=zona_id)
+	subzonas_obj = subzonas.objects.filter(zona=zona)
+	return render(request, 'corpus_base/subzonas2.html', {'subzonas_obj': subzonas_obj})
+
+
+
 def documentos(request):
 	form = documentosForm(request.POST)
-	print(request.user)
 	return render(request, "corpus_base/documentos.html", {'form':form})
 
 def procesando(request):

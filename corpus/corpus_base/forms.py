@@ -1,7 +1,8 @@
 
-from django.forms import ModelForm, Textarea, DateField,DateInput, TextInput
-from corpus_base.models import documentos, casos, clases_de_palabras
+from django.forms import ModelForm, Textarea, DateField,DateInput, TextInput, Form,ChoiceField, Select
+from corpus_base.models import documentos, casos, clases_de_palabras, zonas, subzonas
 from django.forms.widgets import NumberInput
+import json
 
 class documentosForm(ModelForm):
 
@@ -48,3 +49,49 @@ class casosconsultaForm(ModelForm):
 	class Meta:
 		model = casos
 		fields=["caso","lema","clase_de_palabra","determinante_1","determinante_2","determinante_3"]
+
+class FormularioZonas(Form):
+	# dic_zona = dict()
+	# lista_subzonas = []
+	# for subzona in subzonas.objects.all():
+	# 	if subzona.zona.zona in dic_zona:
+	# 		dic_zona[subzona.zona.zona].append(subzona.subzona)
+	# 	else:
+	# 		dic_zona[subzona.zona.zona] = [subzona.subzona]
+	# 	lista_subzonas.append((subzona.id,subzona.subzona))
+	# lista_zonas=[str(zona.zona) for zona in zonas.objects.all()]
+
+	zonas_form = ChoiceField(label="Zonas:", choices=(), widget=Select(attrs={'class':'form-control'}))
+	subzonas_form = ChoiceField(label="subZonas:", choices=(), widget=Select(attrs={'class':'form-control'}))
+
+	# lista_zonas=json.dumps(lista_zonas)
+	# sub = json.dumps(dic_zona)
+
+	def __init__(self, *args, **kwargs):
+		EXTRA_CHOICES = [(10,'Todas')]
+		super(FormularioZonas, self).__init__(*args, **kwargs)
+		choices = EXTRA_CHOICES.copy()
+		choices.extend([(pt.id,pt.zona) for pt in zonas.objects.all()])
+		self.fields['zonas_form'].choices = choices
+		choices_sub = EXTRA_CHOICES.copy()
+		choices_sub.extend([(int(pt.id),pt.subzona) for pt in subzonas.objects.all()])
+		self.fields['subzonas_form'].choices=choices_sub
+		self.fields['subzonas_form'].required = False
+		self.fields['zonas_form'].required = False
+		# if 'zona_id' in self.data:
+		# 	print("AJJAJAAJAJ")
+		# 	#try:
+		# 	print(self.data)
+		# 	zona_id = int(self.data.get('zona_id'))
+		# 	print(zona_id)
+		# 	zona=zonas.objects.filter(id=zona_id)
+		# 	print(zona[0])
+		# 	print(subzonas.objects.filter(zona=zona[0]))
+		# 	choices_sub=[(pt.id,pt.subzona) for pt in subzonas.objects.filter(zona=zona[0])]
+		# 	print(choices_sub)
+		# 	choices_sub.extend(EXTRA_CHOICES)
+		# 	self.fields['subzonas_form'].choices=choices_sub
+		# 	#except:
+		# 		#pass
+		# else:
+		# 	self.fields['subzonas_form'].choices =[]

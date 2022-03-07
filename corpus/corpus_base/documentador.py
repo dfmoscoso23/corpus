@@ -270,6 +270,22 @@ class documentador():
 				#determinante_2=determinante_2.objects.get(determinante=caso[10]),
 				determinante_3=determinante_3.objects.get(determinante=caso[11])
 				)
+		elif (caso[10] =="") & (caso[9] !="") & (caso[11] !=""):
+			cas=casos(
+				documento=documentos.objects.get(titulo=self.titulo),
+				caso=caso[0],
+				lema=lemas.objects.get(lema=caso[1]),
+				mayuscula=caso[2],
+				posicion=caso[3],
+				lema_anterior=caso[4],
+				lema_posterior=caso[5],
+				desinencia=caso[6],
+				prefijos=caso[7],
+				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
+				determinante_1=determinante_1.objects.get(determinante=caso[9]),
+				#determinante_2=determinante_2.objects.get(determinante=caso[10]),
+				determinante_3=determinante_3.objects.get(determinante=caso[11])
+				)
 		else:
 			cas=casos(
 				documento=documentos.objects.get(titulo=self.titulo),
@@ -490,11 +506,13 @@ class documentador():
 			elif dic['PronType']=="Int,Rel":
 				clase="relativo"
 				try:
-					det1=dic['Number']
+					numero=dic['Number']
+					det1=dic_numero[numero]
 				except:
 					det1=""
 				try:
-					det2=dic['Gender']
+					genero=dic['Gender']
+					det2=dic_genero[genero]
 				except:
 					det2=""
 				det3=""
@@ -553,7 +571,7 @@ class documentador():
 			det3=""
 			det4=""      
 		elif token.pos_ == "SYM":
-			clase="desconcido"
+			clase="desconocido"
 			det1=""
 			det2=""
 			det3=""
