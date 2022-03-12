@@ -41,25 +41,27 @@ class estadisticador():
 		return len(resultados)
 	def zoonificacion(self):
 		zona_vc=self.doc['zona_id'].value_counts()
-
 		zona_mas=zona_vc.idxmax()
-		#subzona_mas=
-		zonas= self.doc['zona_id'].unique()
-		#subzonas=
 
 		tfu = self.doc['tema_id'].value_counts().head(5)
-		ax1= tfu.plot(kind='bar', xlabel='Temas', ylabel='Cantidad',figsize=(5, 3), rot=0)#, loc='upper left'
+		ax1= tfu.plot(kind='bar', xlabel='Temas', ylabel='Cantidad', rot=0)#, loc='upper left'
 		flike1 = io.BytesIO()
 		plt.savefig(flike1, bbox_inches="tight")
 		temas_b64 = base64.b64encode(flike1.getvalue()).decode()
-		plt.clf()
+		try:
+			plt.clf()
+		except:
+			pass
 
 		dfu = self.doc.groupby(['zona_id']).subzona_id.value_counts().unstack()
-		ax = dfu.plot(kind='bar', figsize=(5, 3), xlabel='Zonas', ylabel='Cantidad', rot=0).legend(title='Subzona', bbox_to_anchor=(1, 1))#, loc='upper left'
+		ax = dfu.plot(kind='bar', xlabel='Zonas', ylabel='Cantidad', rot=0).legend(title='Subzona', bbox_to_anchor=(1, 1))#, loc='upper left'
 		flike = io.BytesIO()
 		plt.savefig(flike, bbox_inches="tight")
 		b64 = base64.b64encode(flike.getvalue()).decode()
-		plt.clf()
+		try:
+			plt.clf()
+		except:
+			pass
 		return zona_mas, b64, temas_b64
 	def casificador(self):
 		lemas_anteriores = self.casos['lema_anterior'].value_counts().head(5)
@@ -67,4 +69,4 @@ class estadisticador():
 		terminaciones = self.casos['desinencia'].value_counts().head(5)
 		clases = self.casos['clase_de_palabra_id'].value_counts().head(5)
 		lema = self.casos['lema_id'].value_counts().head(5)
-		return lemas_anteriores.values, lemas_anteriores.index, lemas_posteriores.values, lemas_posteriores.index, terminaciones.values, terminaciones.index, clases.values, clases.index, lema.index[0]
+		return lemas_anteriores.values, lemas_anteriores.index, lemas_posteriores.values, lemas_posteriores.index, terminaciones.values, terminaciones.index, clases.values, clases.index, lema.index

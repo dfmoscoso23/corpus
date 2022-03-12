@@ -1,4 +1,8 @@
-<option value="">---------</option>
-{% for subzona in subzonas_obj %}
-<option value="{{ subzona.id }}">{{ subzona.subzona }}</option>
-{% endfor %}
+{% if tod != None %}
+	<option value="">---------</option>
+	{% for subzona in subzonas_obj %}
+	<option value="{{ subzona.id }}">{{ subzona.subzona }}</option>
+	{% endfor %}
+{% else %}
+	<option value="">Todas</option>
+{% endif %}

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'corpus_base',
     'contacto',
     'autenticacion',
-    'crispy_forms'
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +135,6 @@ CRISPY_TEMPLATE_PACK='bootstrap4'
 LOGIN_REDIRECT_URL = 'Inicio'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 102400
+
+
+

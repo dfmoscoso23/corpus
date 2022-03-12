@@ -2,7 +2,7 @@ import nltk
 from nltk.tokenize import word_tokenize, wordpunct_tokenize
 from datetime import date, datetime
 import re
-from corpus_base.models import documentos, tipo_documento,fuente, zonas, subzonas,temas, clases_de_palabras, determinante_1,determinante_2,determinante_3, casos, lemas
+from corpus_base.models import documentos, tipo_documento,fuente, zonas, subzonas,temas, clases_de_palabras, determinante_1,determinante_2,determinante_3,determinante_4, casos, lemas
 import pickle
 import pandas as pd
 import spacy
@@ -86,7 +86,11 @@ class documentador():
 		return prefijo
 
 	def tokenizador(self):
-		tokens=nlp(self.documento)
+		documento_limpio=re.sub(r'([\w\.\,\"])\n([\w\.\,\"])',r'\1 \2',self.documento)
+		documento_limpio=documento_limpio.replace("\n","")
+		documento_limpio=documento_limpio.replace("\r","")
+		documento_limpio=documento_limpio.replace("\t","")
+		tokens=nlp(documento_limpio)
 		lista=[]
 		for i,token in enumerate(tokens):
 			lema= token.lemma_ #self.lematizador(token.lower())
@@ -253,6 +257,7 @@ class documentador():
 				#determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				determinante_2=determinante_2.objects.get(determinante=caso[10]),
 				#determinante_3=determinante_3.objects.get(determinante=caso[11])
+				#determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)
 		elif (caso[10] =="") & (caso[9] =="") & (caso[11] !=""):
 			cas=casos(
@@ -269,6 +274,7 @@ class documentador():
 				#determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				#determinante_2=determinante_2.objects.get(determinante=caso[10]),
 				determinante_3=determinante_3.objects.get(determinante=caso[11])
+				#determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)
 		elif (caso[10] =="") & (caso[9] !="") & (caso[11] !=""):
 			cas=casos(
@@ -285,6 +291,7 @@ class documentador():
 				determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				#determinante_2=determinante_2.objects.get(determinante=caso[10]),
 				determinante_3=determinante_3.objects.get(determinante=caso[11])
+				#determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)
 		else:
 			cas=casos(
@@ -300,7 +307,8 @@ class documentador():
 				clase_de_palabra=clases_de_palabras.objects.get(clase=caso[8]),
 				determinante_1=determinante_1.objects.get(determinante=caso[9]),
 				determinante_2=determinante_2.objects.get(determinante=caso[10]),
-				determinante_3=determinante_3.objects.get(determinante=caso[11])
+				determinante_3=determinante_3.objects.get(determinante=caso[11]),
+				determinante_4=determinante_4.objects.get(determinante=caso[12])
 				)			
 		cas.save()
 	def tagger(self, token):

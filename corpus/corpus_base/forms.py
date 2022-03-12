@@ -1,5 +1,5 @@
 
-from django.forms import ModelForm, Textarea, DateField,DateInput, TextInput, Form,ChoiceField, Select
+from django.forms import ModelForm, Textarea, DateField,DateInput, TextInput, Form,ChoiceField, Select, CharField
 from corpus_base.models import documentos, casos, clases_de_palabras, zonas, subzonas
 from django.forms.widgets import NumberInput
 import json
@@ -44,28 +44,19 @@ class documentosfilterForm(ModelForm):
 		model =casos
 		fields=["documento"]
 
-class casosconsultaForm(ModelForm):
+# class casosconsultaForm(ModelForm):
 
-	class Meta:
-		model = casos
-		fields=["caso","lema","clase_de_palabra","determinante_1","determinante_2","determinante_3"]
+# 	class Meta:
+# 		model = casos
+# 		fields=["caso","lema","clase_de_palabra"]
+# 		widgets = {
+# 		'caso': Textarea(attrs={'rows':1,'cols':7}),
+# 		'lema':Textarea(attrs={'rows':1,'cols':3})
+# 		}
 
 class FormularioZonas(Form):
-	# dic_zona = dict()
-	# lista_subzonas = []
-	# for subzona in subzonas.objects.all():
-	# 	if subzona.zona.zona in dic_zona:
-	# 		dic_zona[subzona.zona.zona].append(subzona.subzona)
-	# 	else:
-	# 		dic_zona[subzona.zona.zona] = [subzona.subzona]
-	# 	lista_subzonas.append((subzona.id,subzona.subzona))
-	# lista_zonas=[str(zona.zona) for zona in zonas.objects.all()]
-
 	zonas_form = ChoiceField(label="Zonas:", choices=(), widget=Select(attrs={'class':'form-control'}))
 	subzonas_form = ChoiceField(label="subZonas:", choices=(), widget=Select(attrs={'class':'form-control'}))
-
-	# lista_zonas=json.dumps(lista_zonas)
-	# sub = json.dumps(dic_zona)
 
 	def __init__(self, *args, **kwargs):
 		EXTRA_CHOICES = [(10,'Todas')]
@@ -95,3 +86,9 @@ class FormularioZonas(Form):
 		# 		#pass
 		# else:
 		# 	self.fields['subzonas_form'].choices =[]
+
+def formasConsultaForm(Form):
+	forma_exacta = CharField(label="Forma Exacta:")
+	forma_aproximada = CharField(label="Forma Exacta:")
+	lema = CharField(label="Lema:")
+	clase = ChoiceField(label="Zonas:", choices=clases_de_palabras.objects.all(), widget=Select(attrs={'class':'form-control'}))

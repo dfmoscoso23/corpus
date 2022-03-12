@@ -3,107 +3,173 @@
 {% load crispy_forms_tags %}
 
 {% block content_r %}
-<p>
-  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Estadística de Forma y Lema
-  </a>
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
-    Usos por zona
-  </button>
-</p>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body">
-  	<div class="container">
-  		<div class="row">
-  			<b>Frecuencia:</b> {{cantidad}}
-  			&nbsp;&nbsp;&nbsp;&nbsp;
-  			<b>Lema principal:</b> {{lema}}
-  		</div>
-  		<div class="row">
-  			<div class="col-lg">
-  				<b>Lemas anteriores más comunes:</b>
-  				{% for l_av,l_ai in lemas_anteriores %}
-			    	<br>
-			    	<b>{{l_ai}}</b> aparece {{l_av}} 
-			    {% endfor %}
-  			</div>
-  			<div class="col-lg">
-  				<b>Lemas posteriores más comunes:</b>
-  				{% for l_av,l_ai in lemas_posteriores %}
-			    	<br>
-			    	<b>{{l_ai}}</b> aparece {{l_av}} 
-			    {% endfor %}
-  			</div>
-  			<div class="col-lg">
-  				<b>Terminaciones más comunes:</b>
-  				{% for l_av,l_ai in terminaciones %}
-			    	<br>
-			    	<b>{{l_ai}}</b> aparece {{l_av}} 
-			    {% endfor %}
-  			</div>
-  			<div class="col-lg">
-  				<div class="card" style="width: 22rem;">
-				  <img class="card-img-top" src='data:image/png;base64,{{ imag_temas }}' alt="Card image cap">
-				  <div class="card-body">
-				    <p class="card-text">Temas más comunes en los que aparecen</p>
-				  </div>
+<div class="containergeneral">
+	<p>
+	  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+		Estadística de Forma y Lema
+	  </a>
+	  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+		Usos por zona
+	  </button>
+	</p>
+	<div class="collapse" id="collapseExample">
+	  <div class="card card-body">
+		<div class="container">
+			<div class="row">
+				<b>Frecuencia:</b> {{cantidad}}
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<b>Lema principal: </b> {% for lem in lema %} {{lem}}, {% endfor %}
+			</div>
+			<div class="row">
+				<div class="col-lg">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+							  <th colspan="2"><b>Lemas anteriores más comunes:</b></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for l_av,l_ai in lemas_anteriores %}
+							<tr>
+							  <td><em>{{l_ai}}</em></td>
+							  <td>{{l_av}}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>		    
 				</div>
-  			</div>
-  		</div>
-  		<div class="row">
-  			<div class="col-lg">
-				<b>Clases de palabra más comunes:</b>
-  				{% for l_av,l_ai in clases %}
-			    	<br>
-			    	<b>{{l_ai}}</b> aparece {{l_av}} 
-			    {% endfor %}
+				<div class="col-lg">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+							  <th colspan="2"><b>Lemas posteriores más comunes:</b></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for l_av,l_ai in lemas_posteriores %}
+							<tr>
+							  <td><em>{{l_ai}}</em></td>
+							  <td>{{l_av}}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>	
+				</div>
+				<div class="col-lg">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+							  <th colspan="2"><b>Terminaciones más comunes:</b></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for l_av,l_ai in terminaciones %}
+							<tr>
+							  <td><em>{{l_ai}}</em></td>
+							  <td>{{l_av}}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+	<!-- 		</div> -->
+	<!-- 		<div class="row"> -->
+				<div class="col-lg">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+							  <th colspan="2"><b>Clases de palabra más comunes:</b></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for l_av,l_ai in clases %}
+							<tr>
+							  <td><em>{{l_ai}}</em></td>
+							  <td>{{l_av}}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
-  		</div>
-  	</div>
-  </div>
-</div>
+		</div>
+	  </div>
+	</div>
 
-<div class="collapse" id="collapseExample2">
-  <div class="card card-body">
-        Zona con más usos = {{zona_mas}}
-     	    <div class="card" style="width: 22rem;">
-			  <img class="card-img-top" src='data:image/png;base64,{{ imag }}' alt="Card image cap">
-			  <div class="card-body">
-			    <p class="card-text">Frecuencia por zonas</p>
-			  </div>
+	<div class="collapse" id="collapseExample2">
+	  <div class="card card-body">
+		<div class="container">
+			<div class="row">
+					Zona con más usos = {{zona_mas}}
 			</div>
-        <img >
-  </div>
+			<div class="row">
+				<div class="col-lg">
+					<div class="card" style="width: 22rem;">
+					  <img class="card-img-top" src='data:image/png;base64,{{ imag }}' alt="Card image cap">
+					  <div class="card-body">
+						<p class="card-text">Frecuencia por zonas</p>
+					  </div>
+					</div>  
+				</div>
+				<div class="col-lg">
+						<div class="card" style="width: 22rem;">
+					  <img class="card-img-top" src='data:image/png;base64,{{ imag_temas }}' alt="Card image cap">
+					  <div class="card-body">
+						<p class="card-text">Temas más comunes en los que aparecen</p>
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	  </div>
+	</div>
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">#Doc</th>
+				<th scope="col">Zona</th>
+				<th scope="col">Subzona</th>
+				<th scope="col">Año</th>
+				<th scope="col">Contexto previo</th>
+				<th scope="col">Forma</th>
+				<th scope="col">Contexto posterior</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for result, pre, pos, doc in resultado %}
+			<tr>
+
+				<td data-toggle="tooltip" data-placement="top" title="Autor: {{doc.autor}} Título: {{doc.titulo}} Fuente: {{doc.fuente}}"><a href="/documento/?id={{doc.id}}">{{doc.id}}</a></td>
+				<td>{{doc.zona.zona}}</td>
+				<td>{{doc.subzona.subzona}}</td>
+				<td>{{doc.fecha_publicacion.year}}</td>
+				<td>{{pre}}</td>
+				<td data-toggle="tooltip" data-placement="top" title="{{result.clase_de_palabra}},{% if result.determinante_1 != None %}{{result.determinante_1}},{% endif %}{% if result.determinante_1 != None %}{{result.determinante_1}},{% endif %}{% if result.determinante_2 != None %}{{result.determinante_2}},{% endif %}{% if result.determinante_3 != None %}{{result.determinante_3}},{% endif %}{% if result.determinante_4 != None %}{{result.determinante_4}}{% endif %}">{{result.caso}}</td>
+				<td>{{pos}}</td>		
+			</tr>
+			{% endfor %}
+		</tbody>	
+			{% if result.determinante_1 != None %}{{result.determinante_1}}{% endif %}
+	</table>
 </div>
-<table class="table table-borderless text-white">
-	<thead>
-		<tr>
-			<th scope="col">#Doc</th>
-			<th scope="col">Zona</th>
-			<th scope="col">Subzona</th>
-			<th scope="col">Año</th>
-			<th scope="col">Contexto previo</th>
-			<th scope="col">Forma</th>
-			<th scope="col">Contexto posterior</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for result, pre, pos, doc in resultado %}
-		<tr>
+<div style="text-align: center;">
+<hr>
+{% load query_transform %}
 
-			<td>{{doc.id}}</td>
-			<td>{{doc.zona.zona}}</td>
-			<td>{{doc.subzona.subzona}}</td>
-			<td>{{doc.fecha_publicacion.year}}</td>
-			<td>{{pre}}</td>
-			<td>{{result.caso}}</td>
-			<td>{{pos}}</td>		
-		</tr>
-		{% endfor %}
-	</tbody>	
-	  	
-</table>
+{% if pag_result.has_previous %}
+	<a href="?{% query_transform page=1 %}">&laquo Primera</a>
+	<a href="?{% query_transform page=pag_result.previous_page_number %}">Anterior</a>
+{% endif %}
 
+{{pag_result.number}} de {{pag_result.paginator.num_pages}}
+
+{% if pag_result.has_next %}
+	<a href="?{% query_transform page=pag_result.next_page_number %}">Siguiente</a>
+	<a href="?{% query_transform page=pag_result.paginator.num_pages %}">&raquo Última</a>
+	
+{% endif %}
+</div>
 <script>
 function send_data() {
 	$.ajax({
