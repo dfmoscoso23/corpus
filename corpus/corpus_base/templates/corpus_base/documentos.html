@@ -17,6 +17,7 @@
 		  					{{form.autor|as_crispy_field}}
 		  					{{form.tipo_documento|as_crispy_field}}
 		  					{{form.fuente|as_crispy_field}}
+		  					{{form.fecha_publicacion|as_crispy_field}}
 		  					{{form.referencia_específica|as_crispy_field}}
 		  					{{form.zona|as_crispy_field}}
 		  					{{form.subzona|as_crispy_field}}
@@ -41,6 +42,12 @@
 			<div class="card mb-2">
                 <div class="card-header">Opciones</div>
                 <div class="card-body">
+                	<div class="input-group">
+                        <form action="/documento" method="GET">
+                            <input name="id" class="form-control" type="text" placeholder="Ingresa un número de documento" aria-label="Ingresa un número de documento" aria-describedby="button-search" />
+                            <button class="btn btn-primary" id="button-search" type="submit">Ir</button>
+                        </form>
+                    </div>
                 	<a class="nav-link text-uppercase text-expanded" href={% url 'Correccion' %}>Corregir Entradas</a>
                 </div>
             </div>

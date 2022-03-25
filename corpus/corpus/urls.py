@@ -26,10 +26,12 @@ urlpatterns = [
     path('consulta/resultado', views.resultado, name="Resultado"),
     #path('consulta/resultado/estadisticas', views.estadisticas, name="Estadisticas"),
     path('contacto/', include('contacto.urls')),
+    path('acercade/', include('acercade.urls')),
     path('procesando/', views.procesando, name="Procesando"),
     path('autenticacion/', include('autenticacion.urls')),
     path('corregir/', views.correccion, name="Correccion"),
     path('ajax/load-subzonas/', views.load_subzonas, name="ajax_load_zonas"),
     path('ajax/load-determinantes/', views.load_determinantes, name="ajax_load_clases"),
+    path('articulos/', include('articulos.urls')),
 
 ]

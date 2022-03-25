@@ -1,7 +1,7 @@
 from django.db import models
 from corpus_base.procesos.operaciones import operaciones
 from django.contrib.auth.models import User
-
+#from autenticacion.models import User
 
 # Create your models here.
 

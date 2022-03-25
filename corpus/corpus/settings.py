@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'contacto',
     'autenticacion',
     'crispy_forms',
+    'acercade',
+    'articulos'
 ]
 
 MIDDLEWARE = [
@@ -136,5 +138,5 @@ LOGIN_REDIRECT_URL = 'Inicio'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 102400
 
-
+#AUTH_USER_MODEL = 'autenticacion.User'
 

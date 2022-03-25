@@ -1,0 +1,74 @@
+{% extends "corpus_base/base.html"%}
+{% load static %}
+
+
+{% block content %} 
+
+<div class="container">
+    <div style="text-align: center;">
+        <h1>Estado actual del corpus</h1>
+    </div>
+    <div class="row">
+        <div class="col-lg">
+            <div class="card mb-4">
+                <div class="card-header">Cantidad de documentos por idioma:</div>
+                <div class="card-body">
+                    Documentos en Español: {{cant_total}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg">
+            <div class="card mb-4">
+                <div class="card-header">Cantidad de Formas:</div>
+                <div class="card-body">
+                    Formas en Español: {{cant_formas}}
+                    <br>
+                    Formas únicas en Español: {{casos_unicos}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg">
+            <div class="card mb-4">
+                <div class="card-header">Cantidad de Lemas:</div>
+                <div class="card-body">
+                    Lemas en Español: {{cant_lemas}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg">
+            <div class="card mb-3">
+                <div class="card-header">Cantidad de documentos por Zona:</div>
+                <div class="card-body">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" src='data:image/png;base64,{{img_zonas}}' alt="Card image cap">
+                    </div> 
+                </div>
+            </div> 
+        </div>
+        <div class="col-lg">
+            <div class="card mb-3">
+                <div class="card-header">Cantidad de documentos por tipo:</div>
+                <div class="card-body">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" src='data:image/png;base64,{{img_tipo}}' alt="Card image cap">
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <div class="col-lg">
+            <div class="card mb-3">
+                <div class="card-header">Cantidad de documentos por tema:</div>
+                <div class="card-body">
+                    <div class="card" style="width: 20rem;">
+                      <img class="card-img-top" src='data:image/png;base64,{{img_tema}}' alt="Card image cap">
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

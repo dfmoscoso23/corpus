@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-14">
 	<div class="row">
-		<div class="col-lg-2">
+		<div class="col-lg-4">
 			<div class="card mb-2">
 	      <div class="card-header">Opciones</div>
 		      <div class="card-body">
@@ -13,8 +13,10 @@
 						<a class="nav-link text-uppercase text-expanded" href={% url 'Documentos' %}>Ingresar el documento</a>
 					</div>
 				</div>
-			</div>
-			<div class="card mb-4">
+			</div>	
+    </div>
+    <div class="col-lg-10">
+    	<div class="card mb-2">
 	      <div class="card-header">Elige un documento:</div>
 		      <div class="card-body">
 		      	<form method="GET" action="">
@@ -25,10 +27,11 @@
 						</form>
 		      </div>
 		    </div>
-		  </div>	
+		  </div>
     </div>
-    <div class="col-lg-10">
-    	<div class="card mb-2">
+  <div class="row">
+  	<div class="col-lg-4">
+			<div class="card mb-10">
 	      <div class="card-header">Documento:</div>
 		      <div class="card-body">
     				<p>{{documento}}</p>
@@ -36,6 +39,7 @@
     		</div>
     	</div>
     </div>
+  </div>
   </div>
 </div>
 <div >

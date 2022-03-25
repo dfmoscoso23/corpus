@@ -16,6 +16,8 @@ def filtro_consulta(request):
 	tema_filtrado=request.GET.get('tema')
 	zona_filtrado=request.GET.get('zonas_form')
 	subzona_filtrado=request.GET.get('subzonas_form')
+	tipo_filtrado=request.GET.get('tipo_documento')
+	revisado_filtrado=request.GET.get('revisado')
 	if caso_filtrado !='' and caso_filtrado is not None:
 		print("FILTRADOOOO",caso_filtrado)
 		resultado=casos.objects.filter(
@@ -24,7 +26,7 @@ def filtro_consulta(request):
 		print(resultado)
 	elif forma_relativa !='' and forma_relativa is not None:
 		resultado=casos.objects.filter(
-			caso__icontains=forma_relativa
+			caso__istartswith=forma_relativa
 			)
 	elif lema_filtrado!='' and lema_filtrado is not None:
 		lema_id=lemas.objects.get(lema=lema_filtrado)
@@ -63,21 +65,32 @@ def filtro_consulta(request):
 	if (str(subzona_filtrado) != '10') & (subzona_filtrado is not None)& (subzona_filtrado !=""):
 		docs_filtrados=modeldocumentos.objects.filter(subzona__id=subzona_filtrado).values_list('id')
 		resultado=resultado.filter(documento__in=docs_filtrados)
+	if (tipo_filtrado != '') & (tipo_filtrado is not None):
+		docs_filtrados=modeldocumentos.objects.filter(tipo_documento=tipo_filtrado).values_list('id')
+		resultado=resultado.filter(documento__in=docs_filtrados)
+	if (revisado_filtrado != '') & (revisado_filtrado is not None):
+		if revisado_filtrado == "on":
+			revisado_filtrado=True
+		else:
+			revisado_filtrado=False
+		docs_filtrados=modeldocumentos.objects.filter(revisado=revisado_filtrado).values_list('id')
+		resultado=resultado.filter(documento__in=docs_filtrados)
 	documentos=list()
 	pre=list()
 	pos=list()
 	doc=list()
 	for resul in resultado:
-		# print("POSICION RESULTADO:",resul.posicion)
+		#print("POSICION RESULTADO:",resul.posicion)
 		tokens=operaciones.tokenizador(resul.documento.documento)
 		if resul.posicion > 12:
 			pre_contexto = "..."
 			for i in range((resul.posicion-12),resul.posicion):
+				#print("TOKEN",i,tokens[i].text)
 				if tokens[i].text in [".",",","!","?","¡","¿","'",":",";"]:
-					# print("TOKEN",i,tokens[i].text)
+					#print("TOKEN",i,tokens[i].text)
 					pre_contexto+=tokens[i].text
 				else:
-					# print("TOKEN",i,tokens[i].text)
+					#print("TOKEN",i,tokens[i].text)
 					pre_contexto+=" "+tokens[i].text
 			pre.append(pre_contexto)
 		elif resul.posicion != 0:

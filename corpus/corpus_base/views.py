@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from corpus_base.documentador import documentador
 from corpus_base.procesos.operaciones import operaciones
 from django.contrib import messages
-from corpus_base.forms import documentosForm, casosForm, documentosfilterForm, FormularioZonas
+from corpus_base.forms import documentosForm, casosForm, documentosfilterForm, FormularioZonas, tiposForm, yearForm
 from corpus_base.models import casos, temas, zonas, subzonas, clases_de_palabras, determinante_1, determinante_2, determinante_3, determinante_4, lemas
 from corpus_base.models import documentos as modeldocumentos
 from django.contrib.auth.models import User
@@ -20,16 +20,19 @@ def consulta(request):
 	formulario_zonas=FormularioZonas(request.GET)
 	#formas_consulta=formasConsultaForm(request.GET)
 	clases_or=clases_de_palabras.objects.all()
+	tipo_form=tiposForm(request.GET)
 	return render(request, "corpus_base/consulta.html",{
 		"opciones_temas":opciones_temas,
 		"formulario_zonas":formulario_zonas,
 		# "formas_consulta":formas_consulta,
-		"clases_or":clases_or
+		"clases_or":clases_or,
+		"tipo_form":tipo_form,
 		})
 def resultado(request):
 	clases_or=clases_de_palabras.objects.all()
 	opciones_temas= temas.objects.all()
 	formulario_zonas=FormularioZonas(request.GET)
+	tipo_form=tiposForm(request.GET)
 	if request.method == 'GET':
 		resultado,pre,pos,doc =filtros.filtro_consulta(request)
 		print(len(resultado),"LARGO DEL RESULTADO")
@@ -38,7 +41,8 @@ def resultado(request):
 			return render(request, "corpus_base/consulta.html",{
 				"clases_or":clases_or,
 				"opciones_temas":opciones_temas,
-				"formulario_zonas":formulario_zonas
+				"formulario_zonas":formulario_zonas,
+				"tipo_form":tipo_form
 				})
 		# resultado_combo=zip(resultado,pre,pos,doc)
 		cantidad=estadisticador.conteo_resultados(resultado)
@@ -87,7 +91,8 @@ def resultado(request):
 			"terminaciones":terminaciones,
 			"clases":clases,
 			"lema":lema,
-			"pag_result":pag_result
+			"pag_result":pag_result,
+			"tipo_form":tipo_form
 			})
 
 def load_determinantes(request):
@@ -160,7 +165,9 @@ def procesando(request):
 			form.instance.usuario=request.user
 			form.save()
 			lista = docu.tokenizador()
-			return render(request,"corpus_base/procesando.html",{"documento":documento,"lista":lista})
+			documento_final=modeldocumentos.objects.last()
+			messages.success(request, f'Documento procesado satisfactoriamente')
+			return render(request,"corpus_base/doc_blog.html", {'documento':documento_final})
 		else:
 			messages.success(request, f'El título ya existía'+str(form.errors))
 			return render(request, "corpus_base/documentos.html", {'form':form})
