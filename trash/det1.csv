@@ -1,0 +1,14 @@
+id;determinante;tipo
+1;Singular;Número
+2;Plural;Número
+3;imperativo;Modo
+4;indicativo;Modo
+5;subjuntivo;Modo
+6;coordinante;Tipo conjunción
+7;subordinante;Tipo conjunción
+8;afirmativo;Tipo adverbio
+9;deíctico;Tipo adverbio
+10;intensificador;Tipo adverbio
+11;interrogativo;Tipo adverbio
+12;negativo;Tipo adverbio
+13;relativo;Tipo adverbio

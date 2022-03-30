@@ -1,0 +1,46 @@
+<div class="form-row">
+	{% if tipo != None %}
+	<div class="form-group col-md-6">
+		<label for="exampleFormControlSelect1">{{tipo}}</label>
+		<select name="determinante_1_form" class="form-control ">
+		<option value="">---------</option>
+		{% for det in det_1 %}
+		<option value="{{ det.id }}">{{ det.determinante }}</option>
+		{% endfor %}
+		</select>
+	</div>
+	{% endif %}
+	{% if tipo2 != None %}
+	<div class="form-group col-md-6">
+		<label for="exampleFormControlSelect1">{{tipo2}}</label>
+		<select name="determinante_2_form" class="form-control ">
+		<option value="">---------</option>
+		{% for det in det_2 %}
+		<option value="{{ det.id }}">{{ det.determinante }}</option>
+		{% endfor %}
+		</select>
+	</div>
+	{% endif %}
+	{% if tipo3 != None %}
+	<div class="form-group col-md-6">
+		<label for="exampleFormControlSelect1">{{tipo3}}</label>
+		<select name="determinante_3_form" class="form-control ">
+		<option value="">---------</option>
+		{% for det in det_3 %}
+		<option value="{{ det.id }}">{{ det.determinante }}</option>
+		{% endfor %}
+		</select>
+	</div>
+	{% endif %}
+	{% if tipo4 != None %}
+	<div class="form-group col-md-6">
+		<label for="exampleFormControlSelect1">{{tipo4}}</label>
+		<select name="determinante_4_form" class="form-control ">
+		<option value="">---------</option>
+		{% for det in det_4 %}
+		<option value="{{ det.id }}">{{ det.determinante }}</option>
+		{% endfor %}
+		</select>
+	</div>
+	{% endif %}
+</div>

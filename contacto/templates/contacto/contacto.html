@@ -1,0 +1,20 @@
+{% extends "corpus_base/base.html"%}
+{% load static %}
+
+{% block content %}
+	<div class="cta-inner text-center rounded ">
+		<h2 class="section-heading mb-4">
+		</h2>
+	  <p class="mb-0">Contáctanos:</p>
+	</div>
+<div class="container" style="text-align: center;">
+	{% if "valido" in request.GET %}
+	<pclass="text-white" style="margin: 20px auto;"> Gracias por haber hecho contacto con nosotros. </p>
+	{% endif %}
+	<form action="" method="POST">
+		{% csrf_token %}
+		<table style="margin: 20px auto;">{{ formulario_contacto.as_table }}</table>
+		<input type="submit" value="Enviar">
+	</form>
+</div>
+{% endblock %}

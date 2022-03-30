@@ -1,0 +1,118 @@
+{% extends "corpus_base/base.html"%}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+	<div class="contenedorconsulta" >
+		<form action="/consulta/resultado" method="GET" id="personForm" data-clases-url="{% url 'ajax_load_clases' %}" data-zonas-url="{% url 'ajax_load_zonas' %}" >
+		<div class="row">		
+			<div class="col-lg">
+				<h3>Filtros en Documentos:</h3>
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Temas:</label>
+					<select name="tema" class="form-control ">
+					<option value="todos">Todos</option>
+					{% for tema in opciones_temas %}
+					<option>{{tema.tema}}</option>
+					{% endfor %}
+					</select>
+				</div>
+				<div class="form-group">
+					<!-- <label for="exampleFormControlSelect1">Zonas:</label> -->
+					{{formulario_zonas}}
+				</div>
+				<div class="form-group">
+					{{tipo_form|crispy}}
+				</div>
+			</div>
+			<div class="col-lg">
+				<div class="form-group">
+					<h3>Filtros en Formas:</h3>
+					<p>
+					{{formas_consulta}}</p>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+						  <label for="inputEmail4">Forma exacta:</label>
+						  <input type="text" class="form-control" id="forma_exacta" name="forma_exacta">
+						</div>
+						<div class="form-group col-md-6">
+						  <label for="inputPassword4">Forma aproximada:</label>
+						  <input type="text" class="form-control" id="forma_relativa" name="forma_relativa">
+						</div>
+					 </div>
+					 <div class="form-row">
+						<div class="form-group col-md-6">
+						  <label for="inputEmail4">Lema:</label>
+						  <input type="text" class="form-control" id="lema" name="lema">
+						</div>
+						<div class="form-group col-md-6">
+						  <label for="inputPassword4">Terminación:</label>
+						  <input type="text" class="form-control" id="Terminación" name="terminacion">
+						</div>
+					 </div>
+					<label for="exampleFormControlSelect1">Clase de palabra:</label>
+					<select id="clase_form" name="clase_de_palabra_form" class="form-control ">
+					<option value="todos">Todas</option>
+					{% for clase in clases_or %}
+					<option>{{clase.clase}}</option>
+					{% endfor %}
+					</select>
+					<div id="div_determinante_1"class="form-row">
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="row" >
+			<div class="col-lg">
+				<div class="form-group" style="text-align: center;">
+					<button type="submit" class="btn btn-success" >Buscar</button>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+	$("#clase_form").change(function () {
+		const url = $("#personForm").attr("data-clases-url");  // get the url of the `load_cities` view
+		const claseId = $(this).val();  // get the selected country ID from the HTML input
+
+		$.ajax({                       // initialize an AJAX request
+			url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+			data: {
+				'clase_id': claseId       // add the country id to the GET parameters
+			},
+			success: function (data) {   // `data` is the return of the `load_cities` view function
+				$("#div_determinante_1").html(data);
+			}
+		});
+
+	});
+</script>
+<script>
+	$("#id_zonas_form").change(function () {
+		const url = $("#personForm").attr("data-zonas-url");  // get the url of the `load_cities` view
+		const zonaId = $(this).val();  // get the selected country ID from the HTML input
+
+		$.ajax({                       // initialize an AJAX request
+			url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+			data: {
+				'zona_id': zonaId       // add the country id to the GET parameters
+			},
+			success: function (data) {   // `data` is the return of the `load_cities` view function
+				$("#id_subzonas_form").html(data);
+			}
+		});
+
+	});
+</script>
+	{% block content_r %}
+
+
+	{% endblock %}	
+{% endblock %}

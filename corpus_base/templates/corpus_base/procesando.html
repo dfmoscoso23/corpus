@@ -1,0 +1,15 @@
+{% extends "corpus_base/base.html"%}
+{% load static %}
+
+{% block content %}
+
+	<p>
+		Enviaste el documento: <strong>{{documento}}</strong>
+	</p>
+	<ul>
+		{% for athlete in lista %}
+		    <li>{{ athlete }}</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
