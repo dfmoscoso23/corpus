@@ -1,5 +1,3 @@
-import nltk
-from nltk.tokenize import word_tokenize, wordpunct_tokenize
 from datetime import date, datetime
 import re
 from corpus_base.models import documentos, tipo_documento,fuente, zonas, subzonas,temas, clases_de_palabras, determinante_1,determinante_2,determinante_3,determinante_4, casos, lemas
