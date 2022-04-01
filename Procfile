@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn corpus.wsgi --log-file=-
+web: gunicorn corpusle.wsgi --log-file -
