@@ -30,11 +30,13 @@ class estadisticador():
 		dic_docs["zona_id"]=[]
 		dic_docs["tema_id"]=[]
 		dic_docs["subzona_id"]=[]
+		dic_docs["provincia_id"]=[]
 		for doc1 in doc:
 			dic_docs["id"].append(doc1.id)
 			dic_docs["zona_id"].append(doc1.zona_id)
 			dic_docs["tema_id"].append(doc1.tema_id)
 			dic_docs["subzona_id"].append(doc1.subzona_id)
+			dic_docs["provincia_id"].append(doc1.provincia_id)
 		self.doc = pd.DataFrame(dic_docs)
 		self.doc = self.doc.drop_duplicates()
 	def conteo_resultados(resultados):
@@ -53,7 +55,7 @@ class estadisticador():
 		except:
 			pass
 
-		dfu = self.doc.groupby(['zona_id']).subzona_id.value_counts().unstack()
+		dfu = self.doc.groupby(['zona_id'])["subzona_id"].value_counts().unstack()
 		ax = dfu.plot(kind='bar', xlabel='Zonas', ylabel='Cantidad', rot=0).legend(title='Subzona', bbox_to_anchor=(1, 1))#, loc='upper left'
 		flike = io.BytesIO()
 		plt.savefig(flike, bbox_inches="tight")

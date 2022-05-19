@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+clases.csv
+det1.csv
+det2.csv
+det3.csv
+det4.csv

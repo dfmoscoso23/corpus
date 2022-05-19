@@ -38,6 +38,12 @@ class temas (models.Model):
 	def __str__ (self):
 		return self.tema
 
+class provincias (models.Model):
+	id = models.AutoField(primary_key=True)
+	provincia= models.CharField(max_length=35)
+	def __str__ (self):
+		return self.provincia
+
 class documentos (models.Model):
 	id=models.AutoField(primary_key=True)
 	titulo = models.CharField(max_length=120)
@@ -47,6 +53,7 @@ class documentos (models.Model):
 	fecha_publicacion  = models.DateField()
 	zona = models.ForeignKey(zonas, on_delete=models.CASCADE)
 	subzona = models.ForeignKey(subzonas, on_delete=models.CASCADE)
+	provincia = models.ForeignKey(provincias, on_delete=models.CASCADE)
 	tema = models.ForeignKey(temas, on_delete=models.CASCADE)
 	parrafos = models.IntegerField()
 	extension_tokens = models.IntegerField()

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from corpus_base.models import tipo_documento, fuente, zonas, subzonas, temas, documentos, lemas, clases_de_palabras, determinante_1, determinante_2, determinante_3, determinante_4, casos
+from corpus_base.models import tipo_documento, fuente, zonas, subzonas, temas, documentos, lemas, clases_de_palabras, determinante_1, determinante_2, determinante_3, determinante_4, casos, provincias
 
 # Register your models here.
 
@@ -16,3 +16,4 @@ admin.site.register(determinante_2)
 admin.site.register(determinante_3)
 admin.site.register(determinante_4)
 admin.site.register(casos)
+admin.site.register(provincias)
